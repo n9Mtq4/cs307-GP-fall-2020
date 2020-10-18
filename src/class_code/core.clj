@@ -307,7 +307,7 @@
 (defn update-trace-set2
   ""
   [trace-set traces index]
-  (update trace-set index clojure.set/union #{(trace-state-at-instruction traces index)}))
+  (update trace-set index clojure.set/union #{(hash (trace-state-at-instruction traces index))}))
 
 (defn sampling-alg-2
   "Implements sampling alg 2"
@@ -359,7 +359,7 @@
                                    (update-trace-set2 traces 19)
                                    )]
                 (recur
-                  (conj programs-so-far new-program-v)
+                  (conj programs-so-far (hash new-program-v))
                   new-traces
                   ;(conj semantics-so-far semantics)
                   (inc iteration)))
