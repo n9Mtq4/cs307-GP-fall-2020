@@ -299,6 +299,16 @@
   [trace-set traces index]
   (update trace-set index clojure.set/union (set (map #(nth % index) traces))))
 
+(defn trace-state-at-instruction
+  ""
+  [traces instruc-idx]
+  (map #(nth % instruc-idx) traces))
+
+(defn update-trace-set2
+  ""
+  [trace-set traces index]
+  (update trace-set index clojure.set/union #{(trace-state-at-instruction traces index)}))
+
 (defn sampling-alg-2
   "Implements sampling alg 2"
   [instructions program-length number-iterations]
@@ -325,26 +335,26 @@
                      ;semantics-so-far
                      (inc iteration))
               (let [new-traces (-> traces-so-far
-                                   (update-trace-set traces 0)
-                                   (update-trace-set traces 1)
-                                   (update-trace-set traces 2)
-                                   (update-trace-set traces 3)
-                                   (update-trace-set traces 4)
-                                   (update-trace-set traces 5)
-                                   (update-trace-set traces 6)
-                                   (update-trace-set traces 7)
-                                   (update-trace-set traces 8)
-                                   (update-trace-set traces 9)
-                                   (update-trace-set traces 10)
-                                   (update-trace-set traces 11)
-                                   (update-trace-set traces 12)
-                                   (update-trace-set traces 13)
-                                   (update-trace-set traces 14)
-                                   (update-trace-set traces 15)
-                                   (update-trace-set traces 16)
-                                   (update-trace-set traces 17)
-                                   (update-trace-set traces 18)
-                                   (update-trace-set traces 19))]
+                                   (update-trace-set2 traces 0)
+                                   (update-trace-set2 traces 1)
+                                   (update-trace-set2 traces 2)
+                                   (update-trace-set2 traces 3)
+                                   (update-trace-set2 traces 4)
+                                   (update-trace-set2 traces 5)
+                                   (update-trace-set2 traces 6)
+                                   (update-trace-set2 traces 7)
+                                   (update-trace-set2 traces 8)
+                                   (update-trace-set2 traces 9)
+                                   (update-trace-set2 traces 10)
+                                   (update-trace-set2 traces 11)
+                                   (update-trace-set2 traces 12)
+                                   (update-trace-set2 traces 13)
+                                   (update-trace-set2 traces 14)
+                                   (update-trace-set2 traces 15)
+                                   (update-trace-set2 traces 16)
+                                   (update-trace-set2 traces 17)
+                                   (update-trace-set2 traces 18)
+                                   (update-trace-set2 traces 19))]
                 (recur
                   (conj programs-so-far new-program)
                   new-traces
