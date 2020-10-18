@@ -315,12 +315,18 @@
 (defn gather-data-from-sampling-alg-1
   "Does what the name suggests"
   [instructions program-length number-iterations threads]
-  (let [results (mt-sampling-alg-1 instructions program-length number-iterations threads)
+  (let [results (time (do
+                        (println "Sampling")
+                        (mt-sampling-alg-1 instructions program-length number-iterations threads)))
         num-programs (count (:programs results))
         num-traces (count (:traces results))
         num-semantics (count (:semantics results))
-        flat-traces (mapcat identity (:traces results))
-        int-semantic (pmap #(count-semantic-diversity flat-traces %) (range program-length))]
+        flat-traces (time (do
+                            (println "Flattening traces")
+                            (mapcat identity (:traces results))))
+        int-semantic (time (do
+                             (println "Determining internal diversity")
+                             (pmap #(count-semantic-diversity flat-traces %) (range program-length))))]
     (println "Number of programs:" num-programs)
     (println "Number of traces:  " num-traces)
     (println "Number of semantics:" num-semantics)
@@ -330,5 +336,5 @@
   "I don't do a whole lot ... yet."
   [& args]
   (binding [*ns* (the-ns 'class-code.core)]
-    (gather-data-from-sampling-alg-1 default-instructions 10 32000 32)
+    (gather-data-from-sampling-alg-1 default-instructions 10 320000 32)
     (System/exit 0)))
