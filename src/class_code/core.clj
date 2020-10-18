@@ -291,8 +291,8 @@
                        semantics-so-far
                        (inc iteration)))
               (recur 
-                programs-so-far
-                ;(conj programs-so-far new-program)
+                ;programs-so-far
+                (conj programs-so-far new-program)
                 (conj traces-so-far traces)
                 (conj semantics-so-far semantics)
                 (inc iteration)))))))))
