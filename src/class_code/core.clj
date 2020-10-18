@@ -13,7 +13,7 @@
     'integer_neg
     'integer_swap
     ;'ERC
-    ;'integer_pop
+    'integer_pop
     ))
 
 ;; EXPERIMENTS
@@ -334,7 +334,17 @@
                                    (update-trace-set traces 6)
                                    (update-trace-set traces 7)
                                    (update-trace-set traces 8)
-                                   (update-trace-set traces 9))]
+                                   (update-trace-set traces 9)
+                                   (update-trace-set traces 10)
+                                   (update-trace-set traces 11)
+                                   (update-trace-set traces 12)
+                                   (update-trace-set traces 13)
+                                   (update-trace-set traces 14)
+                                   (update-trace-set traces 15)
+                                   (update-trace-set traces 16)
+                                   (update-trace-set traces 17)
+                                   (update-trace-set traces 18)
+                                   (update-trace-set traces 19))]
                 (recur
                   (conj programs-so-far new-program)
                   new-traces
@@ -424,5 +434,5 @@
   "I don't do a whole lot ... yet."
   [& args]
   (binding [*ns* (the-ns 'class-code.core)]
-    (gather-data-from-sampling-alg-2 default-instructions 10 640000 32)
+    (gather-data-from-sampling-alg-2 default-instructions 20 640000 32)
     (System/exit 0)))
