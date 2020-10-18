@@ -12,8 +12,8 @@
     'integer_dup
     'integer_neg
     'integer_swap
-    ;;  'ERC
-    'integer_pop
+    ;'ERC
+    ;'integer_pop
     ))
 
 ;; EXPERIMENTS
@@ -336,5 +336,5 @@
   "I don't do a whole lot ... yet."
   [& args]
   (binding [*ns* (the-ns 'class-code.core)]
-    (gather-data-from-sampling-alg-1 default-instructions 10 320000 32)
+    (gather-data-from-sampling-alg-1 default-instructions 10 640000 32)
     (System/exit 0)))
