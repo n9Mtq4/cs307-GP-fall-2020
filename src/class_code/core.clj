@@ -1,5 +1,6 @@
 (ns class-code.core
-  (:gen-class))
+  (:gen-class)
+  (:use clojure.set))
 
 (def default-instructions
   (list
@@ -328,4 +329,6 @@
 (defn -main
   "I don't do a whole lot ... yet."
   [& args]
-  (gather-data-from-sampling-alg-1 default-instructions 10 32000 32))
+  (binding [*ns* (the-ns 'class-code.core)]
+    (gather-data-from-sampling-alg-1 default-instructions 10 32000 32)
+    (System/exit 0)))
