@@ -6,4 +6,5 @@
   :dependencies [[org.clojure/clojure "1.10.1"]]
   :main ^:skip-aot class-code.core
   :target-path "target/%s"
+  :jvm-opts ["-Xms8G" "-Xmx24G"]
   :profiles {:uberjar {:aot :all}})
