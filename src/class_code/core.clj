@@ -327,6 +327,10 @@
         int-semantic (time (do
                              (println "Determining internal diversity")
                              (doall (pmap #(count-semantic-diversity flat-traces %) (range program-length)))))]
+    (println "Instructions:" instructions)
+    (println "Program length:" program-length)
+    (println "Number iterations:" number-iterations)
+    (println "Threads" threads)
     (println "Number of programs:" num-programs)
     (println "Number of traces:  " num-traces)
     (println "Number of semantics:" num-semantics)
