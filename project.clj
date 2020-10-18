@@ -8,5 +8,5 @@
   :target-path "target/%s"
   :profiles {
              :uberjar {:aot :all}
-             :bigram {:jvm-opts ["-Xms54G" "-Xmx54G"]}
+             :bigram {:jvm-opts ["-Xms80G" "-Xmx80G"]}
              })
