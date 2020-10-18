@@ -317,16 +317,16 @@
   [instructions program-length number-iterations threads]
   (let [results (time (do
                         (println "Sampling")
-                        (mt-sampling-alg-1 instructions program-length number-iterations threads)))
+                        (doall (mt-sampling-alg-1 instructions program-length number-iterations threads))))
         num-programs (count (:programs results))
         num-traces (count (:traces results))
         num-semantics (count (:semantics results))
         flat-traces (time (do
                             (println "Flattening traces")
-                            (mapcat identity (:traces results))))
+                            (doall (mapcat identity (:traces results)))))
         int-semantic (time (do
                              (println "Determining internal diversity")
-                             (pmap #(count-semantic-diversity flat-traces %) (range program-length))))]
+                             (doall (pmap #(count-semantic-diversity flat-traces %) (range program-length)))))]
     (println "Number of programs:" num-programs)
     (println "Number of traces:  " num-traces)
     (println "Number of semantics:" num-semantics)
