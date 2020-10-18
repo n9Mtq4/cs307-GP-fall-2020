@@ -321,13 +321,15 @@
        :traces traces-so-far
        ;:semantics semantics-so-far
        }
-      (let [new-program (make-random-linear-push-program instructions program-length)]
-        (if (contains? programs-so-far new-program)
+      (let [new-program (make-random-linear-push-program instructions program-length)
+            new-program-v (vec new-program)]
+        (if (contains? programs-so-far new-program-v)
           (recur programs-so-far
                  traces-so-far
                  ;semantics-so-far
                  iteration)
-          (let [traces (trace-program-on-inputs new-program)
+          (let [traces-l (trace-program-on-inputs new-program)
+                traces (map #(map vec %) traces-l)
                 semantics (map first traces)]
             (if (is-trivial? semantics)
               (recur programs-so-far
@@ -357,7 +359,7 @@
                                    (update-trace-set2 traces 19)
                                    )]
                 (recur
-                  (conj programs-so-far new-program)
+                  (conj programs-so-far new-program-v)
                   new-traces
                   ;(conj semantics-so-far semantics)
                   (inc iteration)))
@@ -445,5 +447,6 @@
   "I don't do a whole lot ... yet."
   [& args]
   (binding [*ns* (the-ns 'class-code.core)]
-    (gather-data-from-sampling-alg-2 default-instructions 20 2560000 16)
-    (System/exit 0)))
+    (gather-data-from-sampling-alg-2 default-instructions 20 1280000 32)
+    (System/exit 0)
+    ))
