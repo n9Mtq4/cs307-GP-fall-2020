@@ -345,16 +345,16 @@
                                    (update-trace-set2 traces 7)
                                    (update-trace-set2 traces 8)
                                    (update-trace-set2 traces 9)
-                                   ;(update-trace-set2 traces 10)
-                                   ;(update-trace-set2 traces 11)
-                                   ;(update-trace-set2 traces 12)
-                                   ;(update-trace-set2 traces 13)
-                                   ;(update-trace-set2 traces 14)
-                                   ;(update-trace-set2 traces 15)
-                                   ;(update-trace-set2 traces 16)
-                                   ;(update-trace-set2 traces 17)
-                                   ;(update-trace-set2 traces 18)
-                                   ;(update-trace-set2 traces 19)
+                                   (update-trace-set2 traces 10)
+                                   (update-trace-set2 traces 11)
+                                   (update-trace-set2 traces 12)
+                                   (update-trace-set2 traces 13)
+                                   (update-trace-set2 traces 14)
+                                   (update-trace-set2 traces 15)
+                                   (update-trace-set2 traces 16)
+                                   (update-trace-set2 traces 17)
+                                   (update-trace-set2 traces 18)
+                                   (update-trace-set2 traces 19)
                                    )]
                 (recur
                   (conj programs-so-far new-program)
@@ -445,5 +445,5 @@
   "I don't do a whole lot ... yet."
   [& args]
   (binding [*ns* (the-ns 'class-code.core)]
-    (gather-data-from-sampling-alg-2 default-instructions 10 1280000 32)
+    (gather-data-from-sampling-alg-2 default-instructions 20 2560000 16)
     (System/exit 0)))
