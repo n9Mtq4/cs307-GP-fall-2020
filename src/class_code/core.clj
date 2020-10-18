@@ -283,9 +283,6 @@
                 semantics (map first traces)]
             (if (is-trivial? semantics)
               (do
-                ;; (println "This is a trival program and semantics")
-                ;; (println new-program)
-                ;; (println semantics)
                 (recur programs-so-far
                        traces-so-far
                        semantics-so-far
@@ -297,6 +294,54 @@
                 (conj semantics-so-far semantics)
                 (inc iteration)))))))))
 
+(defn update-trace-set
+  ""
+  [trace-set traces index]
+  (update trace-set index clojure.set/union (set (map #(nth % index) traces))))
+
+(defn sampling-alg-2
+  "Implements sampling alg 2"
+  [instructions program-length number-iterations]
+  (loop [programs-so-far #{}
+         traces-so-far (vec (repeatedly program-length (fn [] #{})))
+         ;semantics-so-far #{}
+         iteration 0]
+    (if (>= iteration number-iterations)
+      {:programs programs-so-far
+       :traces traces-so-far
+       ;:semantics semantics-so-far
+       }
+      (let [new-program (make-random-linear-push-program instructions program-length)]
+        (if (contains? programs-so-far new-program)
+          (recur programs-so-far
+                 traces-so-far
+                 ;semantics-so-far
+                 iteration)
+          (let [traces (trace-program-on-inputs new-program)
+                semantics (map first traces)]
+            (if (is-trivial? semantics)
+              (recur programs-so-far
+                     traces-so-far
+                     ;semantics-so-far
+                     (inc iteration))
+              (let [new-traces (-> traces-so-far
+                                   (update-trace-set traces 0)
+                                   (update-trace-set traces 1)
+                                   (update-trace-set traces 2)
+                                   (update-trace-set traces 3)
+                                   (update-trace-set traces 4)
+                                   (update-trace-set traces 5)
+                                   (update-trace-set traces 6)
+                                   (update-trace-set traces 7)
+                                   (update-trace-set traces 8)
+                                   (update-trace-set traces 9))]
+                (recur
+                  (conj programs-so-far new-program)
+                  new-traces
+                  ;(conj semantics-so-far semantics)
+                  (inc iteration)))
+              )))))))
+
 (defn mt-sampling-alg-1
   [instructions program-length number-iterations threads]
   (let [results-lst (pmap (fn [x] (sampling-alg-1 instructions program-length number-iterations)) (range threads))
@@ -307,6 +352,21 @@
     {:programs (apply clojure.set/union programs-lst)
      :traces (apply clojure.set/union traces-lst)
      :semantics (apply clojure.set/union semantics-lst)}))
+
+(defn merge-trace-index
+  ""
+  [traces-lst index]
+  (let [tracesi (map #(nth % index) traces-lst)]
+    (apply clojure.set/union tracesi)))
+
+(defn mt-sampling-alg-2
+  [instructions program-length number-iterations threads]
+  (let [results-lst (pmap (fn [x] (sampling-alg-2 instructions program-length number-iterations)) (range threads))
+        programs-lst (map :programs results-lst)
+        traces-lst (map :traces results-lst)]
+    ;; merge results
+    {:programs (apply clojure.set/union programs-lst)
+     :traces (map #(merge-trace-index traces-lst %) (range program-length))}))
 
 (defn count-semantic-diversity
   ""
@@ -332,15 +392,37 @@
     (println "Instructions:" instructions)
     (println "Program length:" program-length)
     (println "Number iterations:" number-iterations)
-    (println "Threads" threads)
-    (println "Number of programs:" num-programs)
-    (println "Number of traces:  " num-traces)
+    (println "Threads:" threads)
+    (println "Number of programs: " num-programs)
+    (println "Number of traces:   " num-traces)
     (println "Number of semantics:" num-semantics)
+    (println "Internal semantic diversity:" (reverse int-semantic))))
+
+(defn gather-data-from-sampling-alg-2
+  "Does what the name suggests"
+  [instructions program-length number-iterations threads]
+  (let [results (time (do
+                        (println "Sampling")
+                        (doall (mt-sampling-alg-2 instructions program-length number-iterations threads))))
+        num-programs (count (:programs results))
+        num-traces (count (:traces results))
+        flat-traces (time (do
+                            (println "Flattening traces")
+                            (doall (mapcat identity (:traces results)))))
+        int-semantic (time (do
+                             (println "Determining internal diversity")
+                             (doall (map count (:traces results)))))]
+    (println "Instructions:" instructions)
+    (println "Program length:" program-length)
+    (println "Number iterations:" number-iterations)
+    (println "Threads:" threads)
+    (println "Number of programs: " num-programs)
+    (println "Number of traces:   " num-traces)
     (println "Internal semantic diversity:" (reverse int-semantic))))
 
 (defn -main
   "I don't do a whole lot ... yet."
   [& args]
   (binding [*ns* (the-ns 'class-code.core)]
-    (gather-data-from-sampling-alg-1 default-instructions 10 640000 32)
+    (gather-data-from-sampling-alg-2 default-instructions 10 640000 32)
     (System/exit 0)))
