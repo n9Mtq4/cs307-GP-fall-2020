@@ -290,10 +290,12 @@
                        traces-so-far
                        semantics-so-far
                        (inc iteration)))
-              (recur (conj programs-so-far new-program)
-                     (conj traces-so-far traces)
-                     (conj semantics-so-far semantics)
-                     (inc iteration)))))))))
+              (recur 
+                programs-so-far
+                ;(conj programs-so-far new-program)
+                (conj traces-so-far traces)
+                (conj semantics-so-far semantics)
+                (inc iteration)))))))))
 
 (defn mt-sampling-alg-1
   [instructions program-length number-iterations threads]
