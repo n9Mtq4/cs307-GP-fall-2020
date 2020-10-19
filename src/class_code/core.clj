@@ -139,7 +139,7 @@
 
 (defn integer_neg
   [state]
-  (make-push-instruction state - [:integer] :integer))
+  (make-push-instruction state -' [:integer] :integer))
 
 (defn integer_swap
   [state]
